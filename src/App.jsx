@@ -6,10 +6,8 @@ import { PieChart, Pie, ResponsiveContainer, Tooltip, Legend, Cell } from 'recha
 import { motion } from 'framer-motion'
 
 // --- Config ---
-const ES_URL = import.meta.env.VITE_ES_URL ||
-  (typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? '/api/events/_search'
-    : 'https://index.multiversx.com/events/_search')
+// Prefer same-origin proxy to avoid CORS in production. Override with VITE_ES_URL if needed.
+const ES_URL = import.meta.env.VITE_ES_URL || '/api/events/_search'
 
 const GOVERNANCE_SC = 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrlllsrujgla'
 
@@ -286,10 +284,10 @@ export default function GovernanceDashboard() {
     const pieDelegationCount = Array.from(delegationCountBreakdown.entries()).map(([name, count]) => ({ name, value: count }))
 
     const topPerCategory = (opt) =>
-      Array.from(perCategoryAddresses[opt].entries())
-        .map(([addr, v]) => ({ address: addr, stake: v.stake, power: v.power, count: v.count }))
-        .sort((a, b) => Number(b.power - a.power))
-        .slice(0, 50)
+        Array.from(perCategoryAddresses[opt].entries())
+            .map(([addr, v]) => ({ address: addr, stake: v.stake, power: v.power, count: v.count }))
+            .sort((a, b) => Number(b.power - a.power))
+            .slice(0, 50)
 
     return {
       byOption,
@@ -311,13 +309,13 @@ export default function GovernanceDashboard() {
   const optionCards = ['yes', 'no', 'abstain', 'veto', 'unknown'].map((k) => {
     const x = (stats.byOption)[k]
     return (
-      <Card key={k} className="rounded-2xl shadow-sm">
-        <CardContent className="p-4">
-          <div className="text-sm uppercase tracking-wide text-gray-500">{k}</div>
-          <div className="text-2xl font-semibold mt-1">{x.count.toLocaleString()} votes</div>
-          <div className="text-xs text-gray-500">Power: {formatEgld(BigInt(x.power))}</div>
-        </CardContent>
-      </Card>
+        <Card key={k} className="rounded-2xl shadow-sm">
+          <CardContent className="p-4">
+            <div className="text-sm uppercase tracking-wide text-gray-500">{k}</div>
+            <div className="text-2xl font-semibold mt-1">{x.count.toLocaleString()} votes</div>
+            <div className="text-xs text-gray-500">Power: {formatEgld(BigInt(x.power))}</div>
+          </CardContent>
+        </Card>
     )
   })
 
@@ -325,31 +323,31 @@ export default function GovernanceDashboard() {
     const [expanded, setExpanded] = useState(false)
     const visible = expanded ? rows : rows.slice(0, 10)
     return (
-      <div className="overflow-auto">
-        <table className="min-w-full text-sm">
-          <thead>
+        <div className="overflow-auto">
+          <table className="min-w-full text-sm">
+            <thead>
             <tr className="text-left border-b">
               <th className="py-2 pr-4">Address</th>
               <th className="py-2 pr-4">Vote Power</th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             {visible.map((r) => (
-              <tr key={r.address} className="border-b hover:bg-gray-50">
-                <td className="py-2 pr-4 font-mono">{r.address}</td>
-                <td className="py-2 pr-4">{formatEgld(r.power)}</td>
-              </tr>
+                <tr key={r.address} className="border-b hover:bg-gray-50">
+                  <td className="py-2 pr-4 font-mono">{r.address}</td>
+                  <td className="py-2 pr-4">{formatEgld(r.power)}</td>
+                </tr>
             ))}
-          </tbody>
-        </table>
-        {rows.length > 10 && (
-          <div className="mt-3">
-            <Button variant="outline" onClick={() => setExpanded((v) => !v)}>
-              {expanded ? 'See less' : 'See more'}
-            </Button>
-          </div>
-        )}
-      </div>
+            </tbody>
+          </table>
+          {rows.length > 10 && (
+              <div className="mt-3">
+                <Button variant="outline" onClick={() => setExpanded((v) => !v)}>
+                  {expanded ? 'See less' : 'See more'}
+                </Button>
+              </div>
+          )}
+        </div>
     )
   }
 
@@ -363,7 +361,7 @@ export default function GovernanceDashboard() {
   }
 
   const formatNumber = (n, decimals = 0) =>
-    Number(n).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+      Number(n).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
   const valueFormatter = (value) => `${formatNumber(value, 2)} EGLD`
   const valueFormatterVotes = (value) => `${formatNumber(value, 0)}`
 
@@ -376,9 +374,9 @@ export default function GovernanceDashboard() {
     const x = cx + r * Math.cos(-midAngle * RADIAN)
     const y = cy + r * Math.sin(-midAngle * RADIAN)
     return (
-      <text x={x} y={y} fill="#334155" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" className="text-xs">
-        {name}: {pct.toFixed(1)}%
-      </text>
+        <text x={x} y={y} fill="#334155" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" className="text-xs">
+          {name}: {pct.toFixed(1)}%
+        </text>
     )
   }
   const PercentLabel = makePercentLabel(3)
@@ -390,9 +388,9 @@ export default function GovernanceDashboard() {
     const x = cx + r * Math.cos(-midAngle * RADIAN)
     const y = cy + r * Math.sin(-midAngle * RADIAN)
     return (
-      <text x={x} y={y} fill="#334155" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" className="text-xs">
-        {name}: {fmt(value)}
-      </text>
+        <text x={x} y={y} fill="#334155" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" className="text-xs">
+          {name}: {fmt(value)}
+        </text>
     )
   }
   const ValueLabelVotes = makeValueLabel(3, valueFormatterVotes)
@@ -403,170 +401,173 @@ export default function GovernanceDashboard() {
     const visible = expanded ? sorted : sorted.slice(0, 10)
     const fmt = mode === 'power' ? valueFormatter : valueFormatterVotes
     return (
-      <div className="overflow-auto">
-        <table className="text-xs" style={{ width: '100%', maxWidth: 360 }}>
-          <thead>
+        <div className="overflow-auto">
+          <table className="text-xs" style={{ width: '100%', maxWidth: 360 }}>
+            <thead>
             <tr className="text-left border-b">
               <th className="pr-3" style={{ padding: '4px 8px' }}>Name</th>
               <th className="pr-0 text-right" style={{ padding: '4px 8px' }}>Value</th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+            <tbody>
             {visible.map((r) => (
-              <tr key={r.name} className="border-b hover:bg-gray-50">
-                <td className="pr-3" style={{ padding: '4px 8px' }}>{r.name}</td>
-                <td className="pr-0 text-right font-medium" style={{ padding: '4px 8px' }}>{fmt(r.value)}</td>
-              </tr>
+                <tr key={r.name} className="border-b hover:bg-gray-50">
+                  <td className="pr-3" style={{ padding: '4px 8px' }}>{r.name}</td>
+                  <td className="pr-0 text-right font-medium" style={{ padding: '4px 8px' }}>{fmt(r.value)}</td>
+                </tr>
             ))}
-          </tbody>
-        </table>
-        {rows.length > 10 && (
-          <div className="mt-3">
-            <Button variant="outline" onClick={() => setExpanded((v) => !v)}>
-              {expanded ? 'See less' : 'See more'}
-            </Button>
-          </div>
-        )}
-      </div>
+            </tbody>
+          </table>
+          {rows.length > 10 && (
+              <div className="mt-3">
+                <Button variant="outline" onClick={() => setExpanded((v) => !v)}>
+                  {expanded ? 'See less' : 'See more'}
+                </Button>
+              </div>
+          )}
+        </div>
     )
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <motion.h1 initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-bold">
-        MultiversX Governance Dashboard
-      </motion.h1>
+      <div className="p-6 space-y-6">
+        <motion.h1 initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="text-3xl font-bold">
+          MultiversX Governance Dashboard
+        </motion.h1>
 
-      <Card className="rounded-2xl">
-        <CardContent className="p-4 flex flex-wrap gap-3 items-center">
-          <div className="text-sm text-gray-600">Querying ES index for events where address/logAddress =</div>
-          <code className="px-2 py-1 bg-gray-100 rounded text-xs font-mono">{GOVERNANCE_SC}</code>
-          <div className="ml-auto flex gap-2 items-center">
-            <Input
-              type="number"
-              min={100}
-              max={50000}
-              value={limit}
-              onChange={(e) => setLimit(Number(e.target.value))}
-              className="w-32"
-              placeholder="size"
-            />
-            <Button onClick={fetchData} disabled={loading}>
-              {loading ? 'Loading…' : 'Refresh'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {error && (
-        <div className="text-red-600">Error fetching data: {error}. In dev, a proxy is configured to avoid CORS.</div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">{optionCards}</div>
-
-      <Card className="rounded-2xl">
-        <CardContent className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            <div className="h-80">
-              <div className="text-sm mb-2 font-medium">Voting Options (by voting power)</div>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={stats.pieDataOptions} dataKey="value" nameKey="name" labelLine label={PercentLabel} outerRadius={120}>
-                    {stats.pieDataOptions.map((entry) => (
-                      <Cell key={entry.name} fill={COLORS[entry.name] || '#60a5fa'} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v) => [valueFormatter(v), 'Power']} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+        <Card className="rounded-2xl">
+          <CardContent className="p-4 flex flex-wrap gap-3 items-center">
+            <div className="text-sm text-gray-600">Querying ES index for events where address/logAddress =</div>
+            <code className="px-2 py-1 bg-gray-100 rounded text-xs font-mono">{GOVERNANCE_SC}</code>
+            <div className="ml-auto flex gap-2 items-center">
+              <Input
+                  type="number"
+                  min={100}
+                  max={50000}
+                  value={limit}
+                  onChange={(e) => setLimit(Number(e.target.value))}
+                  className="w-32"
+                  placeholder="size"
+              />
+              <Button onClick={fetchData} disabled={loading}>
+                {loading ? 'Loading…' : 'Refresh'}
+              </Button>
             </div>
-            <ChartTable rows={stats.pieDataOptions} mode="power" />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            <div className="h-80">
-              <div className="text-sm mb-2 font-medium">Delegated Votes by Source (by voting power)</div>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={stats.pieDelegation} dataKey="value" nameKey="name" labelLine label={PercentLabel} outerRadius={120}>
-                    {stats.pieDelegation.map((_, idx) => (
-                      <Cell key={idx} fill={COLORS.default[idx % COLORS.default.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v) => [valueFormatter(v), 'Power']} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <ChartTable rows={stats.pieDelegation} mode="power" />
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card className="rounded-2xl">
-        <CardContent className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            <div className="h-80">
-              <div className="text-sm mb-2 font-medium">Voting Options (by number of votes)</div>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                <Pie data={stats.pieDataOptionsCount} dataKey="value" nameKey="name" labelLine label={ValueLabelVotes} outerRadius={120}>
-                    {stats.pieDataOptionsCount.map((entry) => (
-                      <Cell key={entry.name} fill={COLORS[entry.name] || '#60a5fa'} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v) => [valueFormatterVotes(v), 'Votes']} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+        {error && (
+            <div className="text-red-600">
+              Error fetching data: {error}. Ensure this app can reach {ES_URL}.
+              In dev, `/api` is proxied. In production, run the cache API or reverse proxy `/api/` to the upstream.
             </div>
-            <ChartTable rows={stats.pieDataOptionsCount} mode="votes" />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-            <div className="h-80">
-              <div className="text-sm mb-2 font-medium">Delegated Votes by Source (by number of votes)</div>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                <Pie data={stats.pieDelegationCount} dataKey="value" nameKey="name" labelLine label={ValueLabelVotes} outerRadius={120}>
-                    {stats.pieDelegationCount.map((_, idx) => (
-                      <Cell key={idx} fill={COLORS.default[idx % COLORS.default.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(v) => [valueFormatterVotes(v), 'Votes']} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">{optionCards}</div>
+
+        <Card className="rounded-2xl">
+          <CardContent className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+              <div className="h-80">
+                <div className="text-sm mb-2 font-medium">Voting Options (by voting power)</div>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={stats.pieDataOptions} dataKey="value" nameKey="name" labelLine label={PercentLabel} outerRadius={120}>
+                      {stats.pieDataOptions.map((entry) => (
+                          <Cell key={entry.name} fill={COLORS[entry.name] || '#60a5fa'} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(v) => [valueFormatter(v), 'Power']} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <ChartTable rows={stats.pieDataOptions} mode="power" />
             </div>
-            <ChartTable rows={stats.pieDelegationCount} mode="votes" />
-          </div>
-        </CardContent>
-      </Card>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+              <div className="h-80">
+                <div className="text-sm mb-2 font-medium">Delegated Votes by Source (by voting power)</div>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={stats.pieDelegation} dataKey="value" nameKey="name" labelLine label={PercentLabel} outerRadius={120}>
+                      {stats.pieDelegation.map((_, idx) => (
+                          <Cell key={idx} fill={COLORS.default[idx % COLORS.default.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(v) => [valueFormatter(v), 'Power']} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <ChartTable rows={stats.pieDelegation} mode="power" />
+            </div>
+          </CardContent>
+        </Card>
 
-      <Card className="rounded-2xl">
-        <CardContent className="p-4">
-          <div className="text-sm text-gray-500">Total Voting Power</div>
-          <div className="text-2xl font-semibold">{formatEgld(stats.totalPower)}</div>
-          <div className="mt-2 text-sm text-gray-500">Total Votes</div>
-          <div className="text-xl font-semibold">{(
-            stats.byOption.yes.count +
-            stats.byOption.no.count +
-            stats.byOption.abstain.count +
-            stats.byOption.veto.count +
-            stats.byOption.unknown.count
-          ).toLocaleString()}</div>
-        </CardContent>
-      </Card>
+        <Card className="rounded-2xl">
+          <CardContent className="p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+              <div className="h-80">
+                <div className="text-sm mb-2 font-medium">Voting Options (by number of votes)</div>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={stats.pieDataOptionsCount} dataKey="value" nameKey="name" labelLine label={ValueLabelVotes} outerRadius={120}>
+                      {stats.pieDataOptionsCount.map((entry) => (
+                          <Cell key={entry.name} fill={COLORS[entry.name] || '#60a5fa'} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(v) => [valueFormatterVotes(v), 'Votes']} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <ChartTable rows={stats.pieDataOptionsCount} mode="votes" />
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+              <div className="h-80">
+                <div className="text-sm mb-2 font-medium">Delegated Votes by Source (by number of votes)</div>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={stats.pieDelegationCount} dataKey="value" nameKey="name" labelLine label={ValueLabelVotes} outerRadius={120}>
+                      {stats.pieDelegationCount.map((_, idx) => (
+                          <Cell key={idx} fill={COLORS.default[idx % COLORS.default.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(v) => [valueFormatterVotes(v), 'Votes']} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <ChartTable rows={stats.pieDelegationCount} mode="votes" />
+            </div>
+          </CardContent>
+        </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">YES — Top voters by power</div><Table rows={stats.lists.yes} /></CardContent></Card>
-        <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">NO — Top voters by power</div><Table rows={stats.lists.no} /></CardContent></Card>
-        <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">ABSTAIN — Top voters by power</div><Table rows={stats.lists.abstain} /></CardContent></Card>
-        <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">VETO — Top voters by power</div><Table rows={stats.lists.veto} /></CardContent></Card>
+        <Card className="rounded-2xl">
+          <CardContent className="p-4">
+            <div className="text-sm text-gray-500">Total Voting Power</div>
+            <div className="text-2xl font-semibold">{formatEgld(stats.totalPower)}</div>
+            <div className="mt-2 text-sm text-gray-500">Total Votes</div>
+            <div className="text-xl font-semibold">{(
+                stats.byOption.yes.count +
+                stats.byOption.no.count +
+                stats.byOption.abstain.count +
+                stats.byOption.veto.count +
+                stats.byOption.unknown.count
+            ).toLocaleString()}</div>
+          </CardContent>
+        </Card>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">YES — Top voters by power</div><Table rows={stats.lists.yes} /></CardContent></Card>
+          <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">NO — Top voters by power</div><Table rows={stats.lists.no} /></CardContent></Card>
+          <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">ABSTAIN — Top voters by power</div><Table rows={stats.lists.abstain} /></CardContent></Card>
+          <Card className="rounded-2xl"><CardContent className="p-4"><div className="text-lg font-semibold mb-3">VETO — Top voters by power</div><Table rows={stats.lists.veto} /></CardContent></Card>
+        </div>
+
+        <div className="text-xs text-gray-500">
+          Notes: Direct `vote` events use `_source.address` as the voter. Delegated votes decode voter from `topics[2]`. Amounts assume 18 decimals. Server cache TTL: 60s.
+        </div>
       </div>
-
-      <div className="text-xs text-gray-500">
-        Notes: Direct `vote` events use `_source.address` as the voter. Delegated votes decode voter from `topics[2]`. Amounts assume 18 decimals. Server cache TTL: 60s.
-      </div>
-    </div>
   )
 }
